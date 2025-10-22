@@ -70,15 +70,43 @@ Hint: Use $gte and $lt operators to specify a date range from January 1, 2024 to
 Complete the "Find" homework in Day 2.
 
 1. Find a shortcut for admin commands. Write the shortcut here.
+> use admin
+> db.runCommand("top")
+> db.listCommands()
 
 
 2. Find the online documentation for queries and cursors. Write the URL here.
-
-
+https://www.mongodb.com/docs/manual/tutorial/query-documents/
+https://www.mongodb.com/docs/manual/core/cursors/
 3. Find the MongoDB documentation for mapreduce. Write the URL here.
+https://www.mongodb.com/docs/manual/core/map-reduce/
 
+https://www.mongodb.com/docs/manual/reference/method/db.collection.mapReduce/
 
 4. Through the JavaScript interface, investigate the code for three collections
     functions: help(), findOne(), and stats(). Past the code for each below.
     For each, write a one-sentence insight that you learned by looking at
     the code.
+ db.help()
+> db.towns.help()
+   help() is a client-side shell convenience (part of the interactive JavaScript interface) that prints the available DB/collection helper commands — it’s meant for discoverability in the shell rather than being a server-side database command.
+
+
+      > var portland = db.towns.findOne(
+    { _id : ObjectId("59094292afbc9350ada6b808") }
+)
+
+> db.countries.findOne({ _id: portland.country.$id })
+
+> var portlandCountryRef = portland.country.$ref;
+> db[portlandCountryRef].findOne({ _id: portland.country.$id })
+
+findOne() is a thin shell-side convenience that immediately returns the first matching document (useful when you need a single document), and you can think of it as equivalent to doing find(...).limit(1) from the shell
+
+> db.myCollection.stats()
+
+
+// equivalent server command (explicit)
+> db.runCommand({ collStats: "myCollection" })
+
+stats() is a shell helper that wraps the server collStats command, so if you need the raw server output or additional fields you can call db.runCommand({ collStats: "<col>" }) directly.
